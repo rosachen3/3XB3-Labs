@@ -79,6 +79,7 @@ def exp1(n):
     times2 = []
     times3 = []
     #list_lengths = [10, 50, 100, 300, 500]
+    print()
     list_lengths = []
     for i in range(10, 1000, 50):
         list_lengths.append(i)
