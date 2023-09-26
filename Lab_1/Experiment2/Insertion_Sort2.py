@@ -29,22 +29,19 @@ def insert(L, i):
 def insert2(L, i):
         current_value = L[i]
         
+        # If previous item is larger than current, shift prev value up
         while i > 0 and L[i-1] > current_value:
             L[i] = L[i-1]
+            # Decrement to compare current value with every value before it 
             i -= 1
-
+        # If prev value is less than current, place the item in it's designated spot
         L[i] = current_value
         return L
         
 def insertion_sort2(L):
-    # print(L)
     for i in range(1, len(L)):
             insert2(L, i)
-            # print(L)
     return L
-
-# L = create_random_list(7, 20)
-# print(insertion_sort2(L))
 
 # ****************** Graph for Insertion Sort **********************
 def compareInsertionRunTimes(n):
