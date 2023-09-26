@@ -21,9 +21,10 @@ def bubble_sort(L):
 # ******************* Optimized Bubble sort code *******************
 
 def bubble_sort2(L):
+    # print("List before ", L)
     for j in range(len(L)-1):
         i = 0
-        while i < len(L)-i-1:
+        while i < len(L)-1-j:
             i += 1
             if L[i] < L[i-1]: # if the number before is bigger, set it as n
                 n = L[i-1] # storing value that we are sorting
@@ -33,6 +34,10 @@ def bubble_sort2(L):
                     L[i-1] = L[i]
                     i += 1
                 L[i-1] = n # placing n at the correct position
+    # print("List after ", L)
+
+# L = create_random_list(5,10)
+# bubble_sort2(L)
 
 # ****************** Graph for Bubble Sort **********************
 def compareInsertionRunTimes(n):
