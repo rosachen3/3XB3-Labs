@@ -6,32 +6,73 @@ import matplotlib.pyplot as plot
 def create_random_list(length, max_value):
     return [random.randint(0, max_value) for _ in range(length)]
 
+def swap(L, i, j):
+    L[i], L[j] = L[j], L[i]
+
+# ******************* Traditional Insertion Sort Code *******************
+
+def insertion_sort(L):
+    for i in range(1, len(L)):
+        insert(L, i)
+
+
 def insert(L, i):
-        print("Current value", L[i])
+    while i > 0:
+        if L[i] < L[i-1]:
+            swap(L, i-1, i)
+            i -= 1
+        else:
+            return
+        
+# ******************* Traditional Selection Sort Code *******************
+
+# Traditional Selection sort
+def selection_sort(L):
+    for i in range(len(L)):
+        min_index = find_min_index(L, i)
+        swap(L, i, min_index)
+
+
+def find_min_index(L, n):
+    min_index = n
+    for i in range(n+1, len(L)):
+        if L[i] < L[min_index]:
+            min_index = i
+    return min_index
+
+# ******************* Bubble sort code *******************
+
+# Traditional Bubble sort
+def bubble_sort(L):
+    for i in range(len(L)):
+        for j in range(len(L) - 1):
+            if L[j] > L[j+1]:
+                swap(L, j, j+1)
+
+
+# ****************** Optimized Insertion Sort Code **********************
+
+def insert2(L, i):
         current_value = L[i]
         
         while i > 0 and L[i-1] > current_value:
-            print("i: ", i)
             L[i] = L[i-1]
-            print("Prev num is larger than current value of", current_value, "Shifting one up", L)
             i -= 1
-            print("Updated i value: ", i)
 
-        # Only assign current_value once you've found the correct position
         L[i] = current_value
-        print("Value before is less. Reached correct position for current value", L)
+        return L
         
 def insertion_sort2(L):
-    print("Original List", L)
+    # print(L)
     for i in range(1, len(L)):
-            insert(L, i)
+            insert2(L, i)
+            # print(L)
     return L
 
-#L = create_random_list(10, 20)
-#print(insertion_sort2(L))
+# L = create_random_list(7, 20)
+# print(insertion_sort2(L))
 
-
-# Optimized Selection Sort
+# ****************** Optimized Selection Sort Code **********************
 
 def selection_sort2(L):
     i = 0
@@ -46,12 +87,12 @@ def selection_sort2(L):
         min_index = i
         
         for k in range(i, j + 1):
-            # Search for max value
+            # Search for max value from unsorted part of list
             if (L[k] > max_value):
                 max_index = k
                 max_value = L[k]
 
-            # Search for min value
+            # Search for min value from unsorted part of list
             elif (L[k] < min_value):
                 min_index = k
                 min_value = L[k]
@@ -69,12 +110,82 @@ def selection_sort2(L):
   
         i += 1
         j -= 1
-        print("Swapped array", L)
+        # print("Swapped array", L)
 
-def swap(L, i, j):
-    L[i], L[j] = L[j], L[i]
+def compareInsertionRunTimes(n):
+    total1 = 0
+    total2 = 0
+    times1 = [] #list of execution time for each list length
+    times2 = []
+    list_lengths = []
+
+    for i in range(10, 1000, 50):
+        list_lengths.append(i)
+        for j in range(n):
+            L = create_random_list(i, 100)
+            L2 = L.copy()
+            start = timeit.default_timer()
+            insertion_sort(L)
+            end = timeit.default_timer()
+            total1 += end - start
+
+            start = timeit.default_timer()
+            insertion_sort2(L2)
+            end = timeit.default_timer()
+            total2 += end - start
+        times1.append(total1/n)
+        times2.append(total2/n)
+    print("Traditional Insertion Sort: ", total1/n)
+    print("Optimized Insertion Sort: ", total2/n)
+    return times1, times2, list_lengths
+
+def compareSelectionRunTimes(n):
+    total1 = 0
+    total2 = 0
+    times1 = [] #list of execution time for each list length
+    times2 = []
+    list_lengths = []
+
+    for i in range(10, 1000, 50):
+        list_lengths.append(i)
+        for j in range(n):
+            L = create_random_list(i, 100)
+            start = timeit.default_timer()
+            selection_sort(L)
+            end = timeit.default_timer()
+            total1 += end - start
+
+            start = timeit.default_timer()
+            selection_sort2(L)
+            end = timeit.default_timer()
+            total2 += end - start
+        times1.append(total1/n)
+        times2.append(total2/n)
+    print("Traditional Insertion Sort: ", total1/n)
+    print("Optimized Insertion Sort: ", total2/n)
+    return times1, times2, list_lengths
 
 
-L = create_random_list(8, 30)
-print("Original array: ", L)
-selection_sort2(L)
+# **** Graph for Insertion Sort ****
+outputs1 = compareInsertionRunTimes(10)
+print()
+plot.plot(outputs1[2], outputs1[0], label='Traditional Insertion Sort')
+plot.plot(outputs1[2], outputs1[1], label='Optimized Insertion Sort')
+plot.plot()
+plot.legend()
+plot.title('Running Time of Traditional Insertion Sort Vs Optimized Insertion Sort ')
+plot.xlabel('List Length')
+plot.ylabel('Execution Time (seconds)')
+plot.show()
+
+# # **** Graph for Selection Sort ****
+# outputs2 = compareSelectionRunTimes(10)
+# print()
+# plot.plot(outputs2[2], outputs2[0], label='Traditional Selection Sort')
+# plot.plot(outputs2[2], outputs2[1], label='Optimized Selection Sort')
+# plot.plot()
+# plot.legend()
+# plot.title('Running Time of Traditional Selection Sort Vs Optimized Selection Sort ')
+# plot.xlabel('List Length')
+# plot.ylabel('Execution Time (seconds)')
+# plot.show()
