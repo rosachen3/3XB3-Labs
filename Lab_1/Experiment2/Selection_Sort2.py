@@ -77,13 +77,14 @@ def compareSelectionRunTimes(n):
         list_lengths.append(i)
         for j in range(n):
             L = create_random_list(i, 100)
+            L2 = L.copy()
             start = timeit.default_timer()
             selection_sort(L)
             end = timeit.default_timer()
             total1 += end - start
 
             start = timeit.default_timer()
-            selection_sort2(L)
+            selection_sort2(L2)
             end = timeit.default_timer()
             total2 += end - start
         times1.append(total1/n)
