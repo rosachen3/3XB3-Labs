@@ -79,10 +79,11 @@ def exp1(n):
     times2 = []
     times3 = []
     #list_lengths = [10, 50, 100, 300, 500]
-    print()
-    list_lengths = []
-    for i in range(10, 1000, 50):
-        list_lengths.append(i)
+    list_lengths = [50, 100, 150, 200, 250]
+    #list_lengths = []
+    #for i in range(10, 1000, 50):
+    for i in list_lengths:
+        #list_lengths.append(i)
         for j in range(n):
             L = create_random_list(i, 100)
             #L.sort()
@@ -110,6 +111,7 @@ def exp1(n):
     print("Bubble Sort takes " + str(total2/total1) + " the amount of time Insertion Sort does.")
     print("Selection Sort takes " + str(total3/total1) + " the amount of time Insertion Sort does.")
     print("Bubble Sort takes " + str(total2/total3) + " the amount of time Selection Sort does.")
+    print("Selection Sort takes " + str(total3/total2) + " the amount of time Bubble Sort does.")
     return times1, times2, times3, list_lengths
 
 outputs = exp1(10)
@@ -117,6 +119,10 @@ print()
 plot.plot(outputs[3], outputs[0], label='Insertion Sort')
 plot.plot(outputs[3], outputs[1], label='Bubble Sort')
 plot.plot(outputs[3], outputs[2], label='Selection Sort')
+print(outputs[3])
+print(outputs[0])
+print(outputs[1])
+print(outputs[2])
 plot.plot()
 plot.legend()
 plot.title('Execution Times of Sorting Algorithms')
