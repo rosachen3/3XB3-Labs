@@ -1,8 +1,13 @@
-from math import log
+"""
+This file corresponds to the first graded lab of 2XC3.
+Feel free to modify and/or add functions to this file.
+"""
 import timeit
 import random
 import matplotlib.pyplot as plot
 
+
+# Create a random list length "length" containing whole numbers between 0 and max_value inclusive
 def create_random_list(length, max_value):
     return [random.randint(0, max_value) for _ in range(length)]
 
@@ -22,6 +27,7 @@ def create_near_sorted_list(length, max_value, swaps):
 def swap(L, i, j):
     L[i], L[j] = L[j], L[i]
 
+
 # ******************* Insertion sort code *******************
 
 # This is the traditional implementation of Insertion Sort.
@@ -37,7 +43,8 @@ def insert(L, i):
             i -= 1
         else:
             return
-        
+
+
 # ******************* Bubble sort code *******************
 
 # Traditional Bubble sort
@@ -64,38 +71,34 @@ def find_min_index(L, n):
             min_index = i
     return min_index
 
-
-def exp3(n):
+def exp1(n):
     total1 = 0
     total2 = 0
     total3 = 0
     times1 = [] #list of execution time for each list length
     times2 = []
     times3 = []
-    #swapValues = [0, 20, 40, 60, 80, 100, 120]
-
-    swapValues = []
+    #list_lengths = [10, 50, 100, 300, 500]
+    print()
+    list_lengths = []
     for i in range(10, 1000, 50):
-    #for i in swapValues:  
-        swapValues.append(i)
+        list_lengths.append(i)
         for j in range(n):
-            L1 = create_near_sorted_list(50, 100, i)
-            L2 = L1.copy()
-            L3 = L1.copy()
+            L = create_random_list(i, 100)
             #L.sort()
 
             start = timeit.default_timer()
-            insertion_sort(L1)
+            insertion_sort(L)
             end = timeit.default_timer()
             total1 += end - start
 
             start = timeit.default_timer()
-            bubble_sort(L2)
+            bubble_sort(L)
             end = timeit.default_timer()
             total2 += end - start
 
             start = timeit.default_timer()
-            selection_sort(L3)
+            selection_sort(L)
             end = timeit.default_timer()
             total3 += end - start
         times1.append(total1/n)
@@ -107,16 +110,16 @@ def exp3(n):
     print("Bubble Sort takes " + str(total2/total1) + " the amount of time Insertion Sort does.")
     print("Selection Sort takes " + str(total3/total1) + " the amount of time Insertion Sort does.")
     print("Bubble Sort takes " + str(total2/total3) + " the amount of time Selection Sort does.")
-    return times1, times2, times3, swapValues
+    return times1, times2, times3, list_lengths
 
-outputs = exp3(10)
+outputs = exp1(10)
 print()
-plot.plot(outputs[3], outputs[0], label='Traditional Insertion Sort')
-plot.plot(outputs[3], outputs[1], label='Traditional Bubble Sort')
-plot.plot(outputs[3], outputs[2], label='Traditional Selection Sort')
+plot.plot(outputs[3], outputs[0], label='Insertion Sort')
+plot.plot(outputs[3], outputs[1], label='Bubble Sort')
+plot.plot(outputs[3], outputs[2], label='Selection Sort')
 plot.plot()
 plot.legend()
-plot.title('Swaps vs. Runtime')
-plot.xlabel('Swaps')
+plot.title('Execution Times of Sorting Algorithms')
+plot.xlabel('List Length')
 plot.ylabel('Execution Time (seconds)')
 plot.show()
