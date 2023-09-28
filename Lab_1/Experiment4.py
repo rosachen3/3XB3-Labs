@@ -6,72 +6,147 @@ import timeit
 import random
 import matplotlib.pyplot as plot
 
-
-# Create a random list length "length" containing whole numbers between 0 and max_value inclusive
 def create_random_list(length, max_value):
     return [random.randint(0, max_value) for _ in range(length)]
 
+# ************ Quick Sort ************
+def quicksort(L):
+    copy = quicksort_copy(L)
+    for i in range(len(L)):
+        L[i] = copy[i]
 
-# Creates a near sorted list by creating a random list, sorting it, then doing a random number of swaps
-def create_near_sorted_list(length, max_value, swaps):
-    L = create_random_list(length, max_value)
-    L.sort()
-    for _ in range(swaps):
-        r1 = random.randint(0, length - 1)
-        r2 = random.randint(0, length - 1)
-        swap(L, r1, r2)
+
+def quicksort_copy(L):
+    if len(L) < 2:
+        return L
+    pivot = L[0]
+    left, right = [], []
+    for num in L[1:]:
+        if num < pivot:
+            left.append(num)
+        else:
+            right.append(num)
+    return quicksort_copy(left) + [pivot] + quicksort_copy(right)
+
+# *************************************
+
+
+# ************ Merge Sort *************
+
+def mergesort(L):
+    if len(L) <= 1:
+        return
+    mid = len(L) // 2
+    left, right = L[:mid], L[mid:]
+
+    mergesort(left)
+    mergesort(right)
+    temp = merge(left, right)
+
+    for i in range(len(temp)):
+        L[i] = temp[i]
+
+
+def merge(left, right):
+    L = []
+    i = j = 0
+
+    while i < len(left) or j < len(right):
+        if i >= len(left):
+            L.append(right[j])
+            j += 1
+        elif j >= len(right):
+            L.append(left[i])
+            i += 1
+        else:
+            if left[i] <= right[j]:
+                L.append(left[i])
+                i += 1
+            else:
+                L.append(right[j])
+                j += 1
     return L
 
+# *************************************
 
-# I have created this function to make the sorting algorithm code read easier
-def swap(L, i, j):
-    L[i], L[j] = L[j], L[i]
+# ************* Heap Sort *************
 
+def heapsort(L):
+    heap = Heap(L)
+    for _ in range(len(L)):
+        heap.extract_max()
 
-# ******************* Insertion sort code *******************
+class Heap:
+    length = 0
+    data = []
 
-# This is the traditional implementation of Insertion Sort.
-def insertion_sort(L):
-    for i in range(1, len(L)):
-        insert(L, i)
+    def __init__(self, L):
+        self.data = L
+        self.length = len(L)
+        self.build_heap()
 
+    def build_heap(self):
+        for i in range(self.length // 2 - 1, -1, -1):
+            self.heapify(i)
 
-def insert(L, i):
-    while i > 0:
-        if L[i] < L[i-1]:
-            swap(L, i-1, i)
-            i -= 1
+    def heapify(self, i):
+        largest_known = i
+        if self.left(i) < self.length and self.data[self.left(i)] > self.data[i]:
+            largest_known = self.left(i)
+        if self.right(i) < self.length and self.data[self.right(i)] > self.data[largest_known]:
+            largest_known = self.right(i)
+        if largest_known != i:
+            self.data[i], self.data[largest_known] = self.data[largest_known], self.data[i]
+            self.heapify(largest_known)
+
+    def insert(self, value):
+        if len(self.data) == self.length:
+            self.data.append(value)
         else:
-            return
+            self.data[self.length] = value
+        self.length += 1
+        self.bubble_up(self.length - 1)
 
+    def insert_values(self, L):
+        for num in L:
+            self.insert(num)
 
-# ******************* Bubble sort code *******************
+    def bubble_up(self, i):
+        while i > 0 and self.data[i] > self.data[self.parent(i)]:
+            self.data[i], self.data[self.parent(i)] = self.data[self.parent(i)], self.data[i]
+            i = self.parent(i)
 
-# Traditional Bubble sort
-def bubble_sort(L):
-    for i in range(len(L)):
-        for j in range(len(L) - 1):
-            if L[j] > L[j+1]:
-                swap(L, j, j+1)
+    def extract_max(self):
+        self.data[0], self.data[self.length - 1] = self.data[self.length - 1], self.data[0]
+        max_value = self.data[self.length - 1]
+        self.length -= 1
+        self.heapify(0)
+        return max_value
 
+    def left(self, i):
+        return 2 * (i + 1) - 1
 
-# ******************* Selection sort code *******************
+    def right(self, i):
+        return 2 * (i + 1)
 
-# Traditional Selection sort
-def selection_sort(L):
-    for i in range(len(L)):
-        min_index = find_min_index(L, i)
-        swap(L, i, min_index)
+    def parent(self, i):
+        return (i + 1) // 2 - 1
 
+    def __str__(self):
+        height = math.ceil(math.log(self.length + 1, 2))
+        whitespace = 2 ** height
+        s = ""
+        for i in range(height):
+            for j in range(2 ** i - 1, min(2 ** (i + 1) - 1, self.length)):
+                s += " " * whitespace
+                s += str(self.data[j]) + " "
+            s += "\n"
+            whitespace = whitespace // 2
+        return s
 
-def find_min_index(L, n):
-    min_index = n
-    for i in range(n+1, len(L)):
-        if L[i] < L[min_index]:
-            min_index = i
-    return min_index
+# *************************************
 
-def exp1(n):
+def exp4(n):
     total1 = 0
     total2 = 0
     total3 = 0
@@ -81,42 +156,43 @@ def exp1(n):
     #list_lengths = [10, 50, 100, 300, 500]
     print()
     list_lengths = []
-    for i in range(10, 1000, 50):
+    for i in range(10, 2000, 50):
         list_lengths.append(i)
         for j in range(n):
-            L = create_random_list(i, 100)
-            #L.sort()
+            L1 = create_random_list(i, 100)
+            L2 = L1.copy()
+            L3 = L1.copy()
 
             start = timeit.default_timer()
-            insertion_sort(L)
+            quicksort(L1)
             end = timeit.default_timer()
             total1 += end - start
 
             start = timeit.default_timer()
-            bubble_sort(L)
+            mergesort(L2)
             end = timeit.default_timer()
             total2 += end - start
 
             start = timeit.default_timer()
-            selection_sort(L)
+            heapsort(L3)
             end = timeit.default_timer()
             total3 += end - start
         times1.append(total1/n)
         times2.append(total2/n)
         times3.append(total3/n)
-    print("Insertion Sort: ", total1/n)
-    print("Bubble Sort: ", total2/n)
-    print("Selection Sort: ", total3/n)
-    print("Bubble Sort takes " + str(total2/total1) + " the amount of time Insertion Sort does.")
-    print("Selection Sort takes " + str(total3/total1) + " the amount of time Insertion Sort does.")
-    print("Bubble Sort takes " + str(total2/total3) + " the amount of time Selection Sort does.")
+    print("Quick Sort: ", total1/n)
+    print("Merge Sort: ", total2/n)
+    print("Heap Sort: ", total3/n)
+    print("Merge Sort takes " + str(total2/total1) + " the amount of time Quick Sort does.")
+    print("Heap Sort takes " + str(total3/total1) + " the amount of time Quick Sort does.")
+    print("Merge Sort takes " + str(total2/total3) + " the amount of time Heap Sort does.")
     return times1, times2, times3, list_lengths
 
-outputs = exp1(10)
+outputs = exp4(10)
 print()
-plot.plot(outputs[3], outputs[0], label='Insertion Sort')
-plot.plot(outputs[3], outputs[1], label='Bubble Sort')
-plot.plot(outputs[3], outputs[2], label='Selection Sort')
+plot.plot(outputs[3], outputs[0], label='Quick Sort')
+plot.plot(outputs[3], outputs[1], label='Merge Sort')
+plot.plot(outputs[3], outputs[2], label='Heap Sort')
 plot.plot()
 plot.legend()
 plot.title('Execution Times of Sorting Algorithms')
