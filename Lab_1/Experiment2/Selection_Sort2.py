@@ -89,8 +89,8 @@ def compareSelectionRunTimes(n):
             total2 += end - start
         times1.append(total1/n)
         times2.append(total2/n)
-    print("Traditional Insertion Sort: ", total1/n)
-    print("Optimized Insertion Sort: ", total2/n)
+    print("Traditional Selection Sort: ", total1/n)
+    print("Optimized Selection Sort: ", total2/n)
     return times1, times2, list_lengths
 
 outputs2 = compareSelectionRunTimes(10)
