@@ -6,7 +6,43 @@ import matplotlib.pyplot as plot
 def create_random_list(length, max_value):
     return [random.randint(0, max_value) for _ in range(length)]
 
-# Iterative merge 
+# ******** Traditional Merge Sort ********** #
+def mergesort(L):
+    if len(L) <= 1:
+        return
+    mid = len(L) // 2
+    left, right = L[:mid], L[mid:]
+
+    mergesort(left)
+    mergesort(right)
+    temp = merge1(left, right)
+
+    for i in range(len(temp)):
+        L[i] = temp[i]
+
+
+def merge1(left, right):
+    L = []
+    i = j = 0
+
+    while i < len(left) or j < len(right):
+        if i >= len(left):
+            L.append(right[j])
+            j += 1
+        elif j >= len(right):
+            L.append(left[i])
+            i += 1
+        else:
+            if left[i] <= right[j]:
+                L.append(left[i])
+                i += 1
+            else:
+                L.append(right[j])
+                j += 1
+    return L
+
+
+# ******** Bottom up Merge Sort *********** #
 def bottom_up_mergesort(L):
     
     # Subarrays increase by powers of 2: 2^0, 2^1, 2^2, 2^3... 
@@ -27,7 +63,7 @@ def bottom_up_mergesort(L):
             
             # Right boundary of the subarray being merged
             right = min( left + (size * 2 - 1), n-1)     
-            merge(L, left, middle, right)
+            merge2(L, left, middle, right)
             
             # Move to the left boundary of the next subarray
             left = left + (size * 2)
@@ -37,7 +73,7 @@ def bottom_up_mergesort(L):
     return L
    
 # Merge items between given bounds
-def merge(L, left, middle, right):
+def merge2(L, left, middle, right):
     
     # Size of left segment
     leftSize = middle - left + 1
@@ -79,7 +115,3 @@ def merge(L, left, middle, right):
         L[k] = rightTemp[j]
         j += 1
         k += 1
-
-L = create_random_list(10, 100)
-bottom_up_mergesort(L)
-
