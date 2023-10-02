@@ -115,3 +115,48 @@ def merge2(L, left, middle, right):
         L[k] = rightTemp[j]
         j += 1
         k += 1
+
+# ***** Graph Code ***** #
+
+def exp7(n):
+    total1 = 0
+    total2 = 0
+    
+    times1 = [] #list of execution time for each list length
+    times2 = []
+    #list_lengths = [10, 50, 100, 300, 500]
+    list_lengths = []
+    for i in range(10, 2000, 50):
+        list_lengths.append(i)
+        for j in range(n):
+            L1 = create_random_list(i, 100)
+            L2 = L1.copy()
+
+            start = timeit.default_timer()
+            mergesort(L1)
+            end = timeit.default_timer()
+            total1 += end - start
+
+            start = timeit.default_timer()
+            bottom_up_mergesort(L2)
+            end = timeit.default_timer()
+            total2 += end - start
+
+        times1.append(total1/n)
+        times2.append(total2/n)
+    print("Traditional Merge Sort: ", total1/n)
+    print("Bottom Up Merge Sort: ", total2/n)
+
+    print("Bottom Up Merge Sort takes " + str(total2/total1) + " the amount of time Traditional Merge Sort does.")
+    return times1, times2, list_lengths
+
+outputs = exp7(10)
+print()
+plot.plot(outputs[2], outputs[0], label='Traditional Merge Sort')
+plot.plot(outputs[2], outputs[1], label='Bottom Up Merge Sort')
+plot.plot()
+plot.legend()
+plot.title('Execution Times of Sorting Algorithms')
+plot.xlabel('List Length')
+plot.ylabel('Execution Time (seconds)')
+plot.show()
