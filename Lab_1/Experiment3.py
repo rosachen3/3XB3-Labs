@@ -66,20 +66,21 @@ def find_min_index(L, n):
 
 
 def exp3(n):
-    total1 = 0
-    total2 = 0
-    total3 = 0
     times1 = [] #list of execution time for each list length
     times2 = []
     times3 = []
     #swapValues = [0, 20, 40, 60, 80, 100, 120]
-
+    # max_swaps = 675 = length*log(length) / 2
     swapValues = []
-    for i in range(10, 1000, 50):
-    #for i in swapValues:  
+    length = 100
+    for i in range(0, 700, 10):
+        total1 = 0
+        total2 = 0
+        total3 = 0
+        #for i in swapValues:  
         swapValues.append(i)
         for j in range(n):
-            L1 = create_near_sorted_list(50, 100, i)
+            L1 = create_near_sorted_list(length, 600, i)
             L2 = L1.copy()
             L3 = L1.copy()
             #L.sort()
