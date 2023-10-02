@@ -160,24 +160,21 @@ class Heap:
 # *************************************
 
 def exp5(n):
-    total1 = 0
-    total2 = 0
-    total3 = 0
     times1 = [] #list of execution time for each list length
     times2 = []
     times3 = []
     #swapValues = [0, 20, 40, 60, 80, 100, 120]
 
     swapValues = []
-    length = 500
-    for i in range(0, 300, 10):
+    length = 700
+    for swaps in range(0, 5000, 50):
         total1 = 0
         total2 = 0
         total3 = 0
         #for i in swapValues:  
-        swapValues.append(i)
+        swapValues.append(swaps)
         for j in range(n):
-            L1 = create_near_sorted_list(length, 400, i)
+            L1 = create_near_sorted_list(length, 600, swaps)
             L2 = L1.copy()
             L3 = L1.copy()
             #L.sort()

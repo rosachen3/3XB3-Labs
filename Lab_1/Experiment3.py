@@ -72,15 +72,15 @@ def exp3(n):
     #swapValues = [0, 20, 40, 60, 80, 100, 120]
     # max_swaps = 675 = length*log(length) / 2
     swapValues = []
-    length = 100
-    for i in range(0, 700, 10):
+    length = 1000
+    for i in range(0, 2000, 100):
         total1 = 0
         total2 = 0
         total3 = 0
         #for i in swapValues:  
         swapValues.append(i)
         for j in range(n):
-            L1 = create_near_sorted_list(length, 600, i)
+            L1 = create_near_sorted_list(length, 1000, i)
             L2 = L1.copy()
             L3 = L1.copy()
             #L.sort()
