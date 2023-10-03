@@ -73,7 +73,7 @@ def exp3(n):
     # max_swaps = 675 = length*log(length) / 2
     swapValues = []
     length = 1000
-    for i in range(0, 2000, 100):
+    for i in range(0, 2100, 100):
         total1 = 0
         total2 = 0
         total3 = 0
@@ -110,7 +110,7 @@ def exp3(n):
     print("Bubble Sort takes " + str(total2/total3) + " the amount of time Selection Sort does.")
     return times1, times2, times3, swapValues
 
-outputs = exp3(10)
+outputs = exp3(20)
 print()
 plot.plot(outputs[3], outputs[0], label='Traditional Insertion Sort')
 plot.plot(outputs[3], outputs[1], label='Traditional Bubble Sort')

@@ -63,7 +63,7 @@ def exp6(n):
     times2 = []
     #list_lengths = [10, 50, 100, 300, 500]
     list_lengths = []
-    for i in range(0, 1000, 100):
+    for i in range(0, 2100, 100):
         total1 = 0
         total2 = 0
         list_lengths.append(i)
@@ -87,10 +87,10 @@ def exp6(n):
     print("Dual Quicksort takes " + str(total2/total1) + " times the amount of time Traditional Quicksort takes.")
     return times1, times2, list_lengths
 
-outputs = exp6(10)
+outputs = exp6(20)
 print()
-plot.plot(outputs[2], outputs[0], label='Traditional Quicksort')
-plot.plot(outputs[2], outputs[1], label='Dual Quicksort')
+plot.plot(outputs[2], outputs[0], label='Dual Quicksort')
+plot.plot(outputs[2], outputs[1], label='Traditional Quicksort')
 plot.plot()
 plot.legend()
 plot.title('Execution Times of Traditional Quicksort vs. Dual Quicksort')

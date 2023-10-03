@@ -45,19 +45,19 @@ def insertion_sort2(L):
 
 # ****************** Graph for Insertion Sort **********************
 def compareInsertionRunTimes(n):
-    total1 = 0
-    total2 = 0
     times1 = [] #list of execution time for each list length
     times2 = []
     list_lengths = []
 
-    for i in range(10, 1000, 50):
+    for i in range(0, 1050, 50):
+        total1 = 0
+        total2 = 0
         list_lengths.append(i)
         for j in range(n):
-            L = create_random_list(i, 100)
-            L2 = L.copy()
+            L1 = create_random_list(i, 100)
+            L2 = L1.copy()
             start = timeit.default_timer()
-            insertion_sort(L)
+            insertion_sort(L1)
             end = timeit.default_timer()
             total1 += end - start
 
@@ -71,8 +71,7 @@ def compareInsertionRunTimes(n):
     print("Optimized Insertion Sort: ", total2/n)
     return times1, times2, list_lengths
 
-outputs1 = compareInsertionRunTimes(10)
-print()
+outputs1 = compareInsertionRunTimes(20)
 plot.plot(outputs1[2], outputs1[0], label='Traditional Insertion Sort')
 plot.plot(outputs1[2], outputs1[1], label='Optimized Insertion Sort')
 plot.plot()

@@ -67,19 +67,20 @@ def selection_sort2(L):
 # ****************** Graph for Selection Sort **********************
 
 def compareSelectionRunTimes(n):
-    total1 = 0
-    total2 = 0
     times1 = [] #list of execution time for each list length
     times2 = []
     list_lengths = []
 
-    for i in range(10, 1000, 50):
+    for i in range(0, 1050, 50):
+        total1 = 0
+        total2 = 0
         list_lengths.append(i)
         for j in range(n):
-            L = create_random_list(i, 100)
-            L2 = L.copy()
+            L1 = create_random_list(i, 100)
+            L2 = L1.copy()
+
             start = timeit.default_timer()
-            selection_sort(L)
+            selection_sort(L1)
             end = timeit.default_timer()
             total1 += end - start
 
@@ -93,7 +94,7 @@ def compareSelectionRunTimes(n):
     print("Optimized Selection Sort: ", total2/n)
     return times1, times2, list_lengths
 
-outputs2 = compareSelectionRunTimes(10)
+outputs2 = compareSelectionRunTimes(20)
 print()
 plot.plot(outputs2[2], outputs2[0], label='Traditional Selection Sort')
 plot.plot(outputs2[2], outputs2[1], label='Optimized Selection Sort')

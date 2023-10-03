@@ -1,4 +1,5 @@
 from math import log
+import math
 import timeit
 import random
 import matplotlib.pyplot as plot
@@ -167,14 +168,14 @@ def exp5(n):
 
     swapValues = []
     length = 700
-    for swaps in range(0, 5000, 50):
+    for swaps in range(0, 2100, 100):
         total1 = 0
         total2 = 0
         total3 = 0
         #for i in swapValues:  
         swapValues.append(swaps)
         for j in range(n):
-            L1 = create_near_sorted_list(length, 600, swaps)
+            L1 = create_near_sorted_list(length, 700, swaps)
             L2 = L1.copy()
             L3 = L1.copy()
             #L.sort()
@@ -204,7 +205,7 @@ def exp5(n):
     print("Merge Sort takes " + str(total2/total3) + " the amount of time Heap Sort does.")
     return times1, times2, times3, swapValues
 
-outputs = exp5(10)
+outputs = exp5(20)
 print()
 plot.plot(outputs[3], outputs[0], label='Quick Sort')
 plot.plot(outputs[3], outputs[1], label='Merge Sort')

@@ -72,33 +72,34 @@ def find_min_index(L, n):
     return min_index
 
 def exp1(n):
-    total1 = 0
-    total2 = 0
-    total3 = 0
     times1 = [] #list of execution time for each list length
     times2 = []
     times3 = []
     #list_lengths = [10, 50, 100, 300, 500]
-    print()
     list_lengths = []
-    for i in range(10, 1000, 50):
+    for i in range(0, 1000, 50):
+        total1 = 0
+        total2 = 0
+        total3 = 0
         list_lengths.append(i)
         for j in range(n):
-            L = create_random_list(i, 100)
+            L1 = create_random_list(i, 100)
+            L2 = L1.copy()
+            L3 = L1.copy()
             #L.sort()
 
             start = timeit.default_timer()
-            insertion_sort(L)
+            insertion_sort(L1)
             end = timeit.default_timer()
             total1 += end - start
 
             start = timeit.default_timer()
-            bubble_sort(L)
+            bubble_sort(L2)
             end = timeit.default_timer()
             total2 += end - start
 
             start = timeit.default_timer()
-            selection_sort(L)
+            selection_sort(L3)
             end = timeit.default_timer()
             total3 += end - start
         times1.append(total1/n)
@@ -112,8 +113,7 @@ def exp1(n):
     print("Bubble Sort takes " + str(total2/total3) + " the amount of time Selection Sort does.")
     return times1, times2, times3, list_lengths
 
-outputs = exp1(10)
-print()
+outputs = exp1(100)
 plot.plot(outputs[3], outputs[0], label='Insertion Sort')
 plot.plot(outputs[3], outputs[1], label='Bubble Sort')
 plot.plot(outputs[3], outputs[2], label='Selection Sort')

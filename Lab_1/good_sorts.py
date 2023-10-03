@@ -1,14 +1,14 @@
 """
 This file corresponds to the first graded lab of 2XC3.
 Feel free to modify and/or add functions to this file.
-"""
-import math
-import timeit
-import random
-import matplotlib.pyplot as plot
 
-def create_random_list(length, max_value):
-    return [random.randint(0, max_value) for _ in range(length)]
+In contains traditional implementations for:
+1) Quick sort
+2) Merge sort
+3) Heap sort
+
+Author: Vincent Maccio
+"""
 
 # ************ Quick Sort ************
 def quicksort(L):
@@ -146,55 +146,4 @@ class Heap:
         return s
 
 # *************************************
-
-def exp4(n):
-    times1 = [] #list of execution time for each list length
-    times2 = []
-    times3 = []
-    #list_lengths = [10, 50, 100, 300, 500]
-    list_lengths = []
-    for i in range(0, 1050, 50):
-        total1 = 0
-        total2 = 0
-        total3 = 0
-        list_lengths.append(i)
-        for j in range(n):
-            L1 = create_random_list(i, 100)
-            L2 = L1.copy()
-            L3 = L1.copy()
-
-            start = timeit.default_timer()
-            quicksort(L1)
-            end = timeit.default_timer()
-            total1 += end - start
-
-            start = timeit.default_timer()
-            mergesort(L2)
-            end = timeit.default_timer()
-            total2 += end - start
-
-            start = timeit.default_timer()
-            heapsort(L3)
-            end = timeit.default_timer()
-            total3 += end - start
-        times1.append(total1/n)
-        times2.append(total2/n)
-        times3.append(total3/n)
-    print("Quick Sort: ", total1/n)
-    print("Merge Sort: ", total2/n)
-    print("Heap Sort: ", total3/n)
-    print("Merge Sort takes " + str(total2/total1) + " the amount of time Quick Sort does.")
-    print("Heap Sort takes " + str(total3/total1) + " the amount of time Quick Sort does.")
-    print("Merge Sort takes " + str(total2/total3) + " the amount of time Heap Sort does.")
-    return times1, times2, times3, list_lengths
-
-outputs = exp4(20)
-plot.plot(outputs[3], outputs[0], label='Quick Sort')
-plot.plot(outputs[3], outputs[1], label='Merge Sort')
-plot.plot(outputs[3], outputs[2], label='Heap Sort')
-plot.plot()
-plot.legend()
-plot.title('Execution Times of Sorting Algorithms')
-plot.xlabel('List Length')
-plot.ylabel('Execution Time (seconds)')
-plot.show()
+    
