@@ -97,8 +97,33 @@ def BSF3(G, node1):
                 predecessor[node] = current_node
     return predecessor
 
+def has_cycle(G):
+    for startNode in G.adj:
+        Q = deque([startNode])
+        marked = {}
+        predecessor = {}
+        
+        for node in G.adj:
+            marked[node] = False
+
+        while len(Q) != 0:
+            current_node = Q.popleft()
+            marked[current_node] = True
+
+            for node in G.adj[current_node]:
+                #Cycle found if adj node is marked and not the parent node
+                if marked[node] and node != predecessor[current_node]:
+                    return True  
+                # Keep traversing through nodes if false
+                if not marked[node]:
+                    Q.append(node)
+                    predecessor[node] = current_node
+
+    return False  # No cycle found in the entire graph
+
+
 '''
-# ***** Example Graph Generation for BFS2 ***** #
+# ***** Example Graph Generation With Cycle***** #
 g1 = Graph(6)
 g1.add_edge(0,1)
 g1.add_edge(1,3)
@@ -108,9 +133,19 @@ g1.add_edge(2,4)
 g1.add_edge(2,3)
 g1.add_edge(3,4)
 
-print(BSF3(g1, 1))
+print(has_cycle(g1))
 '''
 
+'''
+# ***** Example Graph Generation Without Cycle***** #
+g2 = Graph(6)
+g2.add_edge(0,2)
+g2.add_edge(1,3)
+g2.add_edge(2,3)
+g2.add_edge(3,4)
+
+print(has_cycle(g2))
+'''
 
 #Depth First Search
 def DFS(G, node1, node2):
