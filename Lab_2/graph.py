@@ -79,7 +79,25 @@ def BFS2(G, node1, node2):
                 parent[node] = current_node
     return []
 
-''' 
+def BSF3(G, node1):
+    Q = deque([node1])
+    marked = {node1 : True}
+    predecessor = {}
+    
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:        
+            if not marked[node]:
+                Q.append(node)
+                marked[node] = True
+                predecessor[node] = current_node
+    return predecessor
+
+'''
 # ***** Example Graph Generation for BFS2 ***** #
 g1 = Graph(6)
 g1.add_edge(0,1)
@@ -90,8 +108,8 @@ g1.add_edge(2,4)
 g1.add_edge(2,3)
 g1.add_edge(3,4)
 
-print(BFS2(g1,0,5))
-''' 
+print(BSF3(g1, 1))
+'''
 
 
 #Depth First Search
