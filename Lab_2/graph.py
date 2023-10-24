@@ -43,6 +43,56 @@ def BFS(G, node1, node2):
                 marked[node] = True
     return False
 
+#BFS2 - Returning the path from node1 to node2 in a list
+def BFS2(G, node1, node2):
+    Q = deque([node1])
+    marked = {node1 : True}
+    parent = {}
+    path = []
+
+    # If the initial 2 nodes you want to find the path for are the same, return an empty list
+    if node1 == node2:
+        return []
+    
+    # Initialize every node in the dictionary besides the start node to be False (Not marked)
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+
+    # Run while there are numbers in the queue
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:
+            #If in our search, we have reached the second node, trace the path backwards
+            if node == node2:
+                path = [node2]
+                # Update the parent of the end node
+                parent[node] = current_node
+                while node2 != node1:
+                    node2 = parent[node2]
+                    path.insert(0, node2)
+                return path
+            # If the node has not been marked, mark it and change it's value in the dict to True
+            if not marked[node]:
+                Q.append(node)
+                marked[node] = True
+                parent[node] = current_node
+    return []
+
+''' 
+# ***** Example Graph Generation for BFS2 ***** #
+g1 = Graph(6)
+g1.add_edge(0,1)
+g1.add_edge(1,3)
+g1.add_edge(3,5)
+g1.add_edge(0,2)
+g1.add_edge(2,4)
+g1.add_edge(2,3)
+g1.add_edge(3,4)
+
+print(BFS2(g1,0,5))
+''' 
+
 
 #Depth First Search
 def DFS(G, node1, node2):
