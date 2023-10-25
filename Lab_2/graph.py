@@ -43,7 +43,7 @@ def BFS(G, node1, node2):
                 marked[node] = True
     return False
 
-#BFS2 - Returning the path from node1 to node2 in a list
+#**************** BREADTH FIRST SEARCH IMPLEMENTATIONS ****************************#
 def BFS2(G, node1, node2):
     Q = deque([node1])
     marked = {node1 : True}
@@ -121,31 +121,13 @@ def has_cycle(G):
 
     return False  # No cycle found in the entire graph
 
-
-'''
-# ***** Example Graph Generation With Cycle***** #
-g1 = Graph(6)
-g1.add_edge(0,1)
-g1.add_edge(1,3)
-g1.add_edge(3,5)
-g1.add_edge(0,2)
-g1.add_edge(2,4)
-g1.add_edge(2,3)
-g1.add_edge(3,4)
-
-print(has_cycle(g1))
-'''
-
-'''
-# ***** Example Graph Generation Without Cycle***** #
-g2 = Graph(6)
-g2.add_edge(0,2)
-g2.add_edge(1,3)
-g2.add_edge(2,3)
-g2.add_edge(3,4)
-
-print(has_cycle(g2))
-'''
+def is_connected(G):
+    # Use BFS to check if a path exists between all comb. of two nodes in a graph
+    for node1 in G.adj: 
+        for node2 in G.adj: 
+            if node1 != node2 and BFS(G, node1, node2) == False:
+                return False
+    return True
 
 #Depth First Search
 def DFS(G, node1, node2):
