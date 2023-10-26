@@ -1,5 +1,6 @@
 from collections import deque
 import random
+import matplotlib.pyplot as plot
 
 #Undirected graph using an adjacency list
 class Graph:
@@ -55,13 +56,68 @@ def create_random_graph(i,j):
 
     return graph
 
-'''
-G = create_random_graph(4,3)
-print(G.adj)
-'''
+def has_cycle(G):
+    for startNode in G.adj:
+        Q = deque([startNode])
+        marked = {}
+        predecessor = {}
+        
+        for node in G.adj:
+            marked[node] = False
 
+        while len(Q) != 0:
+            current_node = Q.popleft()
+            marked[current_node] = True
 
+            for node in G.adj[current_node]:
+                #Cycle found if adj node is marked and not the parent node
+                if marked[node] and node != predecessor[current_node]:
+                    return True  
+                # Keep traversing through nodes if false
+                if not marked[node]:
+                    Q.append(node)
+                    predecessor[node] = current_node
 
+    return False  # No cycle found in the entire graph
 
+def plotGraph(numNodesList, numRandomGraphs):
 
+    for numNode in numNodesList: 
+        cycleProbTotal = []
+        numEdge = []
+        maxNumEdgesForTest = numNode + 20
+
+        for edge in range(0, maxNumEdgesForTest, 5):
+            if edge > maxNumEdgesForTest:  # Ensure termination
+                break        
+            numEdge.append(edge)
+            
+            # Stores the probability for the current test 
+            # (i.e. probability for running 10 tests with 100 edges each)
+            cycleProbForCurrentTest = 0
+
+            # Generate a certain number of random graphs for each test
+            for graph in range(numRandomGraphs):
+                G = create_random_graph(numNode, edge)
+                if has_cycle(G) == True:
+                    cycleProbForCurrentTest += 1
+
+            # Number of graphs that had a cycle / total number of random graphs with X edges
+            cycleProbForCurrentTest = cycleProbForCurrentTest / numRandomGraphs
+            cycleProbTotal.append(cycleProbForCurrentTest)
+
+        plot.plot(numEdge, cycleProbTotal, label=f"Graph With {numNode} Nodes")
+
+    plot.xlabel('Number of Edges')
+    plot.ylabel('Cycle Probability')
+    plot.title('Cycle Probability vs. Number of Edges')
+    plot.legend()
+    plot.show()
+
+numNodesList = [25, 50, 75, 100]
+numRandomGraphs = 20  # Number of random graphs to create for each test
+
+plotGraph(numNodesList, numRandomGraphs)
+
+    
 
