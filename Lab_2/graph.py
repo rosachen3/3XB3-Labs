@@ -43,6 +43,92 @@ def BFS(G, node1, node2):
                 marked[node] = True
     return False
 
+#**************** BREADTH FIRST SEARCH IMPLEMENTATIONS ****************************#
+def BFS2(G, node1, node2):
+    Q = deque([node1])
+    marked = {node1 : True}
+    parent = {}
+    path = []
+
+    # If the initial 2 nodes you want to find the path for are the same, return an empty list
+    if node1 == node2:
+        return []
+    
+    # Initialize every node in the dictionary besides the start node to be False (Not marked)
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+
+    # Run while there are numbers in the queue
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:
+            #If in our search, we have reached the second node, trace the path backwards
+            if node == node2:
+                path = [node2]
+                # Update the parent of the end node
+                parent[node] = current_node
+                while node2 != node1:
+                    node2 = parent[node2]
+                    path.insert(0, node2)
+                return path
+            # If the node has not been marked, mark it and change it's value in the dict to True
+            if not marked[node]:
+                Q.append(node)
+                marked[node] = True
+                parent[node] = current_node
+    return []
+
+def BFS3(G, node1):
+    Q = deque([node1])
+    marked = {node1 : True}
+    predecessor = {}
+    
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:        
+            if not marked[node]:
+                Q.append(node)
+                marked[node] = True
+                predecessor[node] = current_node
+    return predecessor
+
+def has_cycle(G):
+    for startNode in G.adj:
+        Q = deque([startNode])
+        marked = {}
+        predecessor = {}
+        
+        for node in G.adj:
+            marked[node] = False
+
+        while len(Q) != 0:
+            current_node = Q.popleft()
+            marked[current_node] = True
+
+            for node in G.adj[current_node]:
+                #Cycle found if adj node is marked and not the parent node
+                if marked[node] and node != predecessor[current_node]:
+                    return True  
+                # Keep traversing through nodes if false
+                if not marked[node]:
+                    Q.append(node)
+                    predecessor[node] = current_node
+
+    return False  # No cycle found in the entire graph
+
+def is_connected(G):
+    # Use BFS to check if a path exists between all comb. of two nodes in a graph
+    for node1 in G.adj: 
+        for node2 in G.adj: 
+            if node1 != node2 and BFS(G, node1, node2) == False:
+                return False
+    return True
+
 #Depth First Search
 def DFS(G, node1, node2):
     S = [node1]
@@ -59,6 +145,7 @@ def DFS(G, node1, node2):
                 S.append(node)
     return False
 
+#**************** DEPTH FIRST SEARCH IMPLEMENTATIONS ****************************#
 #Depth First Search 2
 def DFS2(G, node1, node2):
     S = [node1]
