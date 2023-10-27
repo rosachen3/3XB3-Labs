@@ -1,4 +1,6 @@
 from collections import deque
+import random
+import copy
 
 #Undirected graph using an adjacency list
 class Graph:
@@ -211,16 +213,70 @@ def MVC(G):
     return min_cover
 
 ##### the following is testing code #####
-# G1 = Graph(6)
-# G1.add_edge(0,1)
-# G1.add_edge(1,3)
-# G1.add_edge(3,5)
-# G1.add_edge(0,2)
-# G1.add_edge(2,3)
-# G1.add_edge(2,4)
-# G1.add_edge(4,3)
-# # you can even delete edges to test if our algos work
+G1 = Graph(6)
+G1.add_edge(0,1)
+G1.add_edge(1,3)
+G1.add_edge(3,5)
+G1.add_edge(0,2)
+G1.add_edge(2,3)
+G1.add_edge(2,4)
+G1.add_edge(4,3)
+# you can even delete edges to test if our algos work
 
 # print(G1.adj)
 # print(DFS2(G1,1,2))
 # print(DFS3(G1, 3))
+
+#**************** PART TWO ****************************#
+
+def approx1(G):
+    C = set()
+    while True:
+        if is_vertex_cover(G, C):
+            return C
+        v = -1
+        highest_deg = -1
+        for i in G.adj:
+            deg = len(G.adj[i])
+            if deg > highest_deg:
+                highest_deg = deg
+                v = i
+        C.add(v)
+        G1 = copy.deepcopy(G)
+        G1.adj[v] = []
+        G = G1
+    return C
+    
+def approx2(G):
+    C = set()
+    while not is_vertex_cover(G, C):
+        while True:
+            v = random.randint(0, len(G.adj)-1)
+            if v not in C:
+                break
+        C.add(v)
+    return C
+
+def approx3(G):
+    C = set()
+    while not is_vertex_cover(G, C):
+        u = random.randint(0, len(G.adj)-1)
+        v = random.choice(G.adj[u])
+        C.add(u);C.add(v)
+        G1 = copy.deepcopy(G)
+        G1.adj[u] = []
+        G1.adj[v] = []
+    return C
+
+##### the following is for testig purposes
+
+# G1 = Graph(4)
+# G1.add_edge(0,2)
+# G1.add_edge(1,3)
+# G1.add_edge(2,3)
+# G1.add_edge(1,0)
+# G1.add_edge(0,3)
+# G1.add_edge(1,2)
+# print(approx1(G1))
+# print(approx2(G1))
+# print(approx3(G1))
