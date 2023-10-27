@@ -79,7 +79,7 @@ def BFS2(G, node1, node2):
                 parent[node] = current_node
     return []
 
-def BSF3(G, node1):
+def BFS3(G, node1):
     Q = deque([node1])
     marked = {node1 : True}
     predecessor = {}
