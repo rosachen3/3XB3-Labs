@@ -145,6 +145,28 @@ def DFS(G, node1, node2):
                 S.append(node)
     return False
 
+#Depth First Search 2
+def DFS2(G, node1, node2):
+    S = [node1]
+    marked = {}
+    path = []
+    for node in G.adj:
+        marked[node] = False
+    while len(S) != 0:
+        current_node = S.pop()
+        if not marked[current_node]:
+            marked[current_node] = True
+            path.append(current_node) #adding node into path list
+            for node in G.adj[current_node]:
+                if node == node2:
+                    path.append(node) #adding last node into path list
+                    print(path)
+                    return True
+                S.append(node)
+    path = []
+    print(path) # printing empty list if no path exists
+    return False
+
 #Use the methods below to determine minimum Vertex Covers
 def add_to_each(sets, element):
     copy = sets.copy()
@@ -173,5 +195,4 @@ def MVC(G):
             if len(subset) < len(min_cover):
                 min_cover = subset
     return min_cover
-
 
