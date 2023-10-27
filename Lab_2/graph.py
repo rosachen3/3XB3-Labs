@@ -167,19 +167,18 @@ def DFS2(G, node1, node2):
 
 #Depth First Search 3
 def DFS3(G, node):
-    print(node)
+    S = [node]
     marked = {}
     predecessor = {}
     for i in G.adj:
         marked[i] = False
-    for current_node in G.adj:
-        if current_node != node: # to not include target node in the dictionary
-            if not marked[current_node]:
-                marked[current_node] = True
-                path = DFS2(G, current_node, node)
-                print("path from ", current_node, " to ", node, ": ", path) # to see the path from each node to the target node
-                if path != []: # if a path exists
-                    predecessor[current_node] = path[1]
+    while len(S) != 0:
+        current_node = S.pop()
+        for i in G.adj[current_node]:
+            if not marked[i] and (i != node):
+                S.append(i)
+                marked[i] = True
+                predecessor[i] = current_node
     return predecessor
 
 #Use the methods below to determine minimum Vertex Covers
