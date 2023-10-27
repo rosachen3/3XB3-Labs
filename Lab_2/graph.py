@@ -79,7 +79,7 @@ def BFS2(G, node1, node2):
                 parent[node] = current_node
     return []
 
-def BSF3(G, node1):
+def BFS3(G, node1):
     Q = deque([node1])
     marked = {node1 : True}
     predecessor = {}
@@ -145,6 +145,42 @@ def DFS(G, node1, node2):
                 S.append(node)
     return False
 
+#**************** DEPTH FIRST SEARCH IMPLEMENTATIONS ****************************#
+#Depth First Search 2
+def DFS2(G, node1, node2):
+    S = [node1]
+    marked = {}
+    path = []
+    for node in G.adj:
+        marked[node] = False
+    while len(S) != 0:
+        current_node = S.pop()
+        if not marked[current_node]:
+            marked[current_node] = True
+            path.append(current_node) #adding node into path list
+            for node in G.adj[current_node]:
+                if node == node2:
+                    path.append(node) #adding last node into path list
+                    return path
+                S.append(node)
+    return []
+
+#Depth First Search 3
+def DFS3(G, node):
+    S = [node]
+    marked = {}
+    predecessor = {}
+    for i in G.adj:
+        marked[i] = False
+    while len(S) != 0:
+        current_node = S.pop()
+        for i in G.adj[current_node]:
+            if not marked[i] and (i != node):
+                S.append(i)
+                marked[i] = True
+                predecessor[i] = current_node
+    return predecessor
+
 #Use the methods below to determine minimum Vertex Covers
 def add_to_each(sets, element):
     copy = sets.copy()
@@ -174,4 +210,17 @@ def MVC(G):
                 min_cover = subset
     return min_cover
 
+##### the following is testing code #####
+# G1 = Graph(6)
+# G1.add_edge(0,1)
+# G1.add_edge(1,3)
+# G1.add_edge(3,5)
+# G1.add_edge(0,2)
+# G1.add_edge(2,3)
+# G1.add_edge(2,4)
+# G1.add_edge(4,3)
+# # you can even delete edges to test if our algos work
 
+# print(G1.adj)
+# print(DFS2(G1,1,2))
+# print(DFS3(G1, 3))
