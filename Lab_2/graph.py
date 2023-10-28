@@ -1,4 +1,7 @@
 from collections import deque
+import random
+import copy
+import matplotlib.pyplot as plot
 
 #Undirected graph using an adjacency list
 class Graph:
@@ -25,6 +28,33 @@ class Graph:
     def number_of_nodes():
         return len()
 
+def create_random_graph(i,j): 
+    numNodes = i 
+    numEdges = j
+    count = 0
+    # Assuming we have a simple graph where we cannot have multiple edges or self-loops
+    # Max number of edges is found through the equation: nodes * (nodes - 1) / 2
+    maxEdges = (i * (i-1)) // 2 
+
+    if j > maxEdges: 
+        print("Number of edges is too large for the number of vertices. Cannot generate graph")
+        return Graph(i)
+    
+    # Generate graph with i nodes
+    graph = Graph(i)
+
+    while count < j:
+        # Randomly select two nodes
+        node1 = random.randint(0, i-1)
+        node2 = random.randint(0, i-1)
+
+        # Only add the edge between two nodes if the nodes are not equal
+        # and if there does not exist an edge between the two nodes yet
+        if node1 != node2 and node2 not in graph.adj[node1]:
+            graph.add_edge(node1, node2)
+            count += 1
+
+    return graph
 
 #Breadth First Search
 def BFS(G, node1, node2):
@@ -201,7 +231,7 @@ def is_vertex_cover(G, C):
     return True
 
 def MVC(G):
-    nodes = [i for i in range(G.get_size())]
+    nodes = [i for i in range(len(G.adj))]
     subsets = power_set(nodes)
     min_cover = nodes
     for subset in subsets:
@@ -219,8 +249,107 @@ def MVC(G):
 # G1.add_edge(2,3)
 # G1.add_edge(2,4)
 # G1.add_edge(4,3)
-# # you can even delete edges to test if our algos work
+# you can even delete edges to test if our algos work
 
 # print(G1.adj)
 # print(DFS2(G1,1,2))
 # print(DFS3(G1, 3))
+
+#**************** PART TWO ****************************#
+
+def approx1(G):
+    C = set()
+    while True:
+        if is_vertex_cover(G, C):
+            return C
+        v = -1
+        highest_deg = -1
+        for i in G.adj:
+            deg = len(G.adj[i])
+            if deg > highest_deg:
+                highest_deg = deg
+                v = i
+        C.add(v)
+        G1 = copy.deepcopy(G)
+        G1.adj[v] = []
+        G = G1
+    return C
+    
+def approx2(G):
+    C = set()
+    while not is_vertex_cover(G, C):
+        while True:
+            v = random.randint(0, len(G.adj)-1)
+            if v not in C:
+                break
+        C.add(v)
+    return C
+
+def approx3(G):
+    C = set()
+    while not is_vertex_cover(G, C):
+        u = random.randint(0, len(G.adj)-1)
+        while (G.adj[u] == []):
+            u = random.randint(0, len(G.adj)-1)
+        v = random.choice(G.adj[u])
+        
+        C.add(u);C.add(v)
+        G1 = copy.deepcopy(G)
+        G1.adj[u] = []
+        G1.adj[v] = []
+    return C
+
+##### the following is for testig purposes
+
+# G1 = Graph(4)
+# G1.add_edge(0,2)
+# G1.add_edge(1,3)
+# G1.add_edge(2,3)
+# G1.add_edge(1,0)
+# G1.add_edge(0,3)
+# G1.add_edge(1,2)
+# print(approx1(G1))
+# print(approx2(G1))
+# print(approx3(G1))
+def approx_Exp():
+    edge_values = [1, 5, 10, 15, 20, 25]
+    #declaring a list of expected performance for each edge value
+    exp_performance1 = []
+    exp_performance2 = []
+    exp_performance3 = []
+    #generating 1000 graphs for each value of edges
+    for edges in edge_values:
+        for i in range(1000):
+            mvc_sum = 0
+            a1_sum = 0
+            a2_sum = 0
+            a3_sum = 0
+
+            G = create_random_graph(8, edges)
+            mvc_sum += len(MVC(G))
+
+            # running each approximation on each of the same 1000 graphs
+            vc1 = approx1(G)
+            # updating sum variables
+            a1_sum += len(vc1) 
+            vc2 = approx2(G)
+            a2_sum += len(vc2) 
+            vc3 = approx3(G)
+            a3_sum += len(vc3) 
+            
+        exp_performance1.append(a1_sum/mvc_sum)
+        exp_performance2.append(a2_sum/mvc_sum)
+        exp_performance3.append(a3_sum/mvc_sum)
+    return exp_performance1, exp_performance2, exp_performance3, edge_values
+
+outputs = approx_Exp()
+print()
+plot.plot(outputs[3], outputs[0], label='approx1')
+plot.plot(outputs[3], outputs[1], label='approx2')
+plot.plot(outputs[3], outputs[2], label='approx3')
+plot.plot()
+plot.legend()
+plot.title('Expected Performance vs. Edges')
+plot.xlabel('Edges')
+plot.ylabel('Expected Performance')
+plot.show()
