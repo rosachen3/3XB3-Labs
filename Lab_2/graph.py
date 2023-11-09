@@ -312,20 +312,22 @@ def approx3(G):
 # print(approx2(G1))
 # print(approx3(G1))
 def approx_Exp():
-    edge_values = [1, 5, 10, 15, 20, 25]
+    # edge_values = [1, 5, 10, 15, 20, 25]
+    edge_values = []
     #declaring a list of expected performance for each edge value
     exp_performance1 = []
     exp_performance2 = []
     exp_performance3 = []
     #generating 1000 graphs for each value of edges
-    for edges in edge_values:
+    for edges in range(1, 36, 2):
+    # for edges in edge_values:
+        mvc_sum = 0
+        a1_sum = 0
+        a2_sum = 0
+        a3_sum = 0
+        edge_values.append(edges)
         for i in range(1000):
-            mvc_sum = 0
-            a1_sum = 0
-            a2_sum = 0
-            a3_sum = 0
-
-            G = create_random_graph(8, edges)
+            G = create_random_graph(9, edges)
             mvc_sum += len(MVC(G))
 
             # running each approximation on each of the same 1000 graphs
