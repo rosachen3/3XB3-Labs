@@ -39,7 +39,7 @@ def ks_rec(items: List[Tuple[int,int]], capacity: int) -> int:
 def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
     n = len(items)
     # Create a 2D list with dimensions [capacity][# of items]
-    # Initialize array with 0s
+    # Initialize array with -1s
     K = []
     for i in range(n+1):
         row = []
@@ -63,7 +63,36 @@ def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
     return K[n][capacity]
 
     
-# def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
+def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
+    n = len(items)
+    # Initialize array with -1s
+    K = []
+    for i in range(n+1):
+        row = []
+        for j in range(capacity+1):
+            row.append(-1)
+        K.append(row)
+
+    # Helper function for recursive top-down approach
+    def top_down(capacity, n):
+        # Base case: No items or capacity is 0, value is always 0
+        if n == 0 or capacity == 0:
+            return 0
+        # Weight of current item us <= capacity left
+        if items[n-1][0] <= capacity:
+            # Take the max value b/w including current element or not
+            K[n][capacity] = max(
+                items[n-1][1] + top_down(capacity - items[n-1][0], n-1),
+                top_down(capacity, n-1)
+            )
+            return K[n][capacity]
+        
+        # Weight of current item > capacity
+        else:
+            K[n][capacity] = top_down(capacity, n-1)
+            return K[n][capacity]
+
+    return top_down(capacity, n)
     
 
     
@@ -72,7 +101,7 @@ def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
 # ks_brute_force(randItemSet(10, 2, 17, 100, 200), 20)
 # ks_rec(randItemSet(4, 2, 17, 100, 200), 20)
 
-# items = [(1,1),(3,4),(4,5),(5,7)]
-# capacity = 7
-# results = ks_bottom_up(items, capacity)
-# print("Maximum value is ", results)
+items = [(1,1),(3,4),(4,5),(5,7)]
+capacity = 7
+results = ks_top_down(items, capacity)
+print("Maximum value is ", results)
