@@ -36,7 +36,7 @@ def subset_sum_bottom_up(numbers, target):
 #************ Top Down Solution ************
 
 def subset_sum_top_down(numbers, target):
-    sp = {}
+    sp = {} # dictionary
     for i in range(len(numbers) + 1):
         sp[(i,0)] = True
     for i in range(target + 1):
