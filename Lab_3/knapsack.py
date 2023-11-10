@@ -1,6 +1,9 @@
 import random
 from itertools import chain, combinations
+import timeit
 from typing import List, Tuple
+import matplotlib.pyplot as plot
+
 
 def randItemSet(numOfItems: int, minWeight: int, maxWeight: int, minValue: int, maxValue: int) -> List[Tuple[int,int]]:
     #Generate a list of items within specifed weight, and value ranges
@@ -14,9 +17,7 @@ def randItemSet(numOfItems: int, minWeight: int, maxWeight: int, minValue: int, 
 
 def ks_brute_force(items: List[Tuple[int,int]], capacity: int) -> int:
     highestValue = 0
-    print("Set of Items: ", items)
     subSets = list(chain.from_iterable(combinations(items, r) for r in range(len(items) + 1)))
-    print("All possible sets: ", subSets)
     for i in subSets:
         sumWeight = 0
         sumValue = 0
@@ -26,7 +27,6 @@ def ks_brute_force(items: List[Tuple[int,int]], capacity: int) -> int:
         if sumWeight <= capacity:
             if sumValue > highestValue:
                 highestValue = sumValue
-    print("highest value is: ", highestValue)
     return highestValue
 
 def ks_rec(items: List[Tuple[int,int]], capacity: int) -> int:
@@ -46,3 +46,42 @@ def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
 #### TESTING CODE ####
 # ks_brute_force(randItemSet(10, 2, 17, 100, 200), 20)
 # ks_rec(randItemSet(4, 2, 17, 100, 200), 20)
+######################
+
+def Exp1(n):
+    ks_brute_force_runtime = []
+    ks_rec_runtime = []
+    num_of_items = []
+
+    for items in range(1, 20, 2):
+    # for edges in edge_values:
+        total1 = 0
+        total2 = 0
+        num_of_items.append(items)
+        set = randItemSet(items, 50, 200, 1000, 2000)
+        for j in range(n):
+            start = timeit.default_timer()
+            ks_brute_force(set, 100)
+            end = timeit.default_timer()
+            total1 += end - start
+
+            start = timeit.default_timer()
+            ks_rec(set, 100)
+            end = timeit.default_timer()
+            total2 += end - start
+        ks_brute_force_runtime.append(total1/n)
+        ks_rec_runtime.append(total2/n)
+      
+    return ks_brute_force_runtime, ks_rec_runtime, num_of_items
+
+outputs = Exp1(100)
+
+plot.plot(outputs[2], outputs[0], label='brute force imp.')
+plot.plot(outputs[2], outputs[1], label='recursive imp.')
+
+plot.plot()
+plot.legend()
+plot.title('Runtime vs. Number of Items for ks implementations')
+plot.xlabel('Number of Items')
+plot.ylabel('Runtime (s)')
+plot.show()
