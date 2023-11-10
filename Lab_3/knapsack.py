@@ -37,8 +37,32 @@ def ks_rec(items: List[Tuple[int,int]], capacity: int) -> int:
     return max(notIncluding_i, including_i)
 
 def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
+    n = len(items)
+    # Create a 2D list with dimensions [capacity][# of items]
+    # Initialize array with 0s
+    K = []
+    for i in range(n+1):
+        row = []
+        for j in range(capacity+1):
+            row.append(0)
+        K.append(row)
 
-    return 0
+    # Fill in table using bottom up approach 
+    for i in range(n+1):
+        for j in range(capacity+1):
+            # Base case: If there are no items or the weight is 0, the max value is 0
+            if i == 0 or capacity == 0:
+                K[i][capacity] = 0
+            # The weight of the current item is less than the current capacity
+            elif items[i-1][0] <= j:
+                K[i][j] = max(K[i-1][j], items[i-1][1] + K[i-1][j-items[i-1][0]])
+            # Weight of current item is larger than current capacity
+            # The value is set to be the same as the one from the row above 
+            else: 
+                K[i][j] = K[i-1][j]
+    return K[n][capacity]
+
+    
 def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
 
     return 0
@@ -46,3 +70,8 @@ def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
 #### TESTING CODE ####
 # ks_brute_force(randItemSet(10, 2, 17, 100, 200), 20)
 # ks_rec(randItemSet(4, 2, 17, 100, 200), 20)
+
+# items = [(1,1),(3,4),(4,5),(5,7)]
+# capacity = 8
+# results = ks_bottom_up(items, capacity)
+# print("Maximum value is ", results)
