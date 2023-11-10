@@ -30,8 +30,12 @@ def ks_brute_force(items: List[Tuple[int,int]], capacity: int) -> int:
     return highestValue
 
 def ks_rec(items: List[Tuple[int,int]], capacity: int) -> int:
-    
-    return 0
+    if not items or capacity == 0:
+        return 0
+    notIncluding_i = ks_rec(items[:-1],capacity)
+    including_i = ks_rec(items[:-1], capacity-items[len(items) - 1][0]) + items[len(items) - 1][1]
+    return max(notIncluding_i, including_i)
+
 def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
 
     return 0
@@ -41,3 +45,4 @@ def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
 
 #### TESTING CODE ####
 # ks_brute_force(randItemSet(10, 2, 17, 100, 200), 20)
+# ks_rec(randItemSet(4, 2, 17, 100, 200), 20)
