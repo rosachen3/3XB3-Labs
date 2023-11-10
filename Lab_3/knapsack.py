@@ -51,8 +51,8 @@ def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
     for i in range(n+1):
         for j in range(capacity+1):
             # Base case: If there are no items or the weight is 0, the max value is 0
-            if i == 0 or capacity == 0:
-                K[i][capacity] = 0
+            if i == 0 or j == 0:
+                K[i][j] = 0
             # The weight of the current item is less than the current capacity
             elif items[i-1][0] <= j:
                 K[i][j] = max(K[i-1][j], items[i-1][1] + K[i-1][j-items[i-1][0]])
@@ -63,15 +63,16 @@ def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
     return K[n][capacity]
 
     
-def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
+# def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
+    
 
-    return 0
+    
 
 #### TESTING CODE ####
 # ks_brute_force(randItemSet(10, 2, 17, 100, 200), 20)
 # ks_rec(randItemSet(4, 2, 17, 100, 200), 20)
 
 # items = [(1,1),(3,4),(4,5),(5,7)]
-# capacity = 8
+# capacity = 7
 # results = ks_bottom_up(items, capacity)
 # print("Maximum value is ", results)
