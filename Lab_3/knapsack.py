@@ -93,6 +93,7 @@ def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
             return K[n][capacity]
 
     return top_down(capacity, n)
+
     
 
     
@@ -101,7 +102,7 @@ def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
 # ks_brute_force(randItemSet(10, 2, 17, 100, 200), 20)
 # ks_rec(randItemSet(4, 2, 17, 100, 200), 20)
 
-items = [(1,1),(3,4),(4,5),(5,7)]
-capacity = 7
-results = ks_top_down(items, capacity)
-print("Maximum value is ", results)
+# items = [(1,1),(3,4),(4,5),(5,7)]
+# capacity = 7
+# results = ks_top_down(items, capacity)
+# print("Maximum value is ", results)
