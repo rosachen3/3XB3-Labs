@@ -46,25 +46,38 @@ def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
             else:
                 bu[i][j] = max(bu[i-1][j], bu[i-1][j-items[i - 1][0]] + items[i - 1][1])
     return bu[len(items)][capacity]
-
+    
 def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
-    return 0
+    n = len(items)
+    # Initialize array with -1s
+    K = []
+    for i in range(n+1):
+        row = []
+        for j in range(capacity+1):
+            row.append(-1)
+        K.append(row)
 
-def top_down_aux(items, i, j, td):
-    if i == 0 or j == 0:
-        td[(i, j)] = 0
-    else:
-        if items[i - 1][0] > j:
-            if not (i - 1, j) in td:
-                td[(i, j)] = top_down_aux(items, i - 1, j, td)
+    # Helper function for recursive top-down approach
+    def top_down(capacity, n):
+        # Base case: No items or capacity is 0, value is always 0
+        if n == 0 or capacity == 0:
+            return 0
+        # Weight of current item us <= capacity left
+        if items[n-1][0] <= capacity:
+            # Take the max value b/w including current element or not
+            K[n][capacity] = max(
+                items[n-1][1] + top_down(capacity - items[n-1][0], n-1),
+                top_down(capacity, n-1)
+            )
+            return K[n][capacity]
+        
+        # Weight of current item > capacity
         else:
-            td[(i, j)] = max(top_down_aux(items, i - 1, j, td), top_down_aux(items, i - 1, j - items[i - 1][0], td) + items[i - 1][1])
-    return td[(i, j)]
-#### TESTING CODE ####
-# ks_brute_force(randItemSet(10, 2, 17, 100, 200), 20)
-# ks_rec(randItemSet(4, 2, 17, 100, 200), 20)
-ks_top_down(randItemSet(4, 2, 17, 100, 200), 20)
-######################
+            K[n][capacity] = top_down(capacity, n-1)
+            return K[n][capacity]
+
+    return top_down(capacity, n)
+
 
 def Exp1(n):
     ks_brute_force_runtime = []

@@ -56,3 +56,14 @@ def top_down_aux(numbers, i, j, sp):
         if not (i - 1, j - numbers[i - 1]) in sp:
             top_down_aux(numbers, i - 1, j - numbers[i - 1], sp)
         sp[(i, j)] = sp[(i - 1, j)] or sp[(i - 1, j - numbers[i - 1])]
+    
+# def top_down_aux(items, i, j, td):
+#     if i == 0 or j == 0:
+#         td[(i, j)] = 0
+#     else:
+#         if items[i - 1][0] > j:
+#             if not (i - 1, j) in td:
+#                 td[(i, j)] = top_down_aux(items, i - 1, j, td)
+#         else:
+#             td[(i, j)] = max(top_down_aux(items, i - 1, j, td), top_down_aux(items, i - 1, j - items[i - 1][0], td) + items[i - 1][1])
+#     return td[(i, j)]
