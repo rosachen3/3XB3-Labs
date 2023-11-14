@@ -41,7 +41,7 @@ def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
 
     for i in range(1, len(items) + 1):
         for j in range(1, capacity + 1):
-            if items[i - 1] > j:
+            if items[i - 1][1] > j:
                 bu[i][j] = bu[i - 1][j]
             else:
                 bu[i][j] = max(bu[i-1][j], bu[i-1][j-items[i - 1][0]] + items[i - 1][1])
@@ -105,14 +105,55 @@ def Exp1(n):
       
     return ks_brute_force_runtime, ks_rec_runtime, num_of_items
 
-outputs = Exp1(100)
+# outputs = Exp1(100)
 
-plot.plot(outputs[2], outputs[0], label='brute force imp.')
-plot.plot(outputs[2], outputs[1], label='recursive imp.')
+# plot.plot(outputs[2], outputs[0], label='brute force imp.')
+# plot.plot(outputs[2], outputs[1], label='recursive imp.')
+
+# plot.plot()
+# plot.legend()
+# plot.title('Runtime vs. Number of Items for ks implementations')
+# plot.xlabel('Number of Items')
+# plot.ylabel('Runtime (s)')
+# plot.show()
+
+
+def Exp2(n):
+    ks_bottom_up_runtime = []
+    ks_top_down_runtime = []
+    num_of_items = []
+
+    for items in range(1, 20, 2):
+    # for edges in edge_values:
+        total1 = 0
+        total2 = 0
+        num_of_items.append(items)
+        # set = randItemSet(items, 50, 200, 1000, 2000)
+        set = randItemSet(items, 50, 75, 50, 75)
+        for j in range(n):
+            start = timeit.default_timer()
+            ks_bottom_up(set, 100)
+            end = timeit.default_timer()
+            total1 += end - start
+
+            start = timeit.default_timer()
+            ks_top_down(set, 100)
+            end = timeit.default_timer()
+            total2 += end - start
+        ks_bottom_up_runtime.append(total1/n)
+        ks_top_down_runtime.append(total2/n)
+      
+    return ks_bottom_up_runtime, ks_top_down_runtime, num_of_items
+
+outputs = Exp2(100)
+
+plot.plot(outputs[2], outputs[0], label='bottom up imp.')
+plot.plot(outputs[2], outputs[1], label='top down imp.')
 
 plot.plot()
 plot.legend()
-plot.title('Runtime vs. Number of Items for ks implementations')
+plot.title('Runtime vs. Number of Items for ks implementations BP vs. TD')
 plot.xlabel('Number of Items')
 plot.ylabel('Runtime (s)')
 plot.show()
+
