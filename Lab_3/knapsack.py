@@ -37,15 +37,33 @@ def ks_rec(items: List[Tuple[int,int]], capacity: int) -> int:
     return max(notIncluding_i, including_i)
 
 def ks_bottom_up(items: List[Tuple[int,int]], capacity: int) -> int:
+    bu = [[0 for j in range(capacity + 1)] for i in range(len(items) + 1)]
 
-    return 0
+    for i in range(1, len(items) + 1):
+        for j in range(1, capacity + 1):
+            if items[i - 1] > j:
+                bu[i][j] = bu[i - 1][j]
+            else:
+                bu[i][j] = max(bu[i-1][j], bu[i-1][j-items[i - 1][0]] + items[i - 1][1])
+    return bu[len(items)][capacity]
+
 def ks_top_down(items: List[Tuple[int,int]], capacity: int) -> int:
-
     return 0
 
+def top_down_aux(items, i, j, td):
+    if i == 0 or j == 0:
+        td[(i, j)] = 0
+    else:
+        if items[i - 1][0] > j:
+            if not (i - 1, j) in td:
+                td[(i, j)] = top_down_aux(items, i - 1, j, td)
+        else:
+            td[(i, j)] = max(top_down_aux(items, i - 1, j, td), top_down_aux(items, i - 1, j - items[i - 1][0], td) + items[i - 1][1])
+    return td[(i, j)]
 #### TESTING CODE ####
 # ks_brute_force(randItemSet(10, 2, 17, 100, 200), 20)
 # ks_rec(randItemSet(4, 2, 17, 100, 200), 20)
+ks_top_down(randItemSet(4, 2, 17, 100, 200), 20)
 ######################
 
 def Exp1(n):
