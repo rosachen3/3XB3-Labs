@@ -56,6 +56,39 @@ def dijkstra(G, source):
                 pred[neighbour] = current_node
     return dist
 
+def dijkstra_approx(G, source, k):
+    pred = {} #Predecessor dictionary. Isn't returned, but here for your understanding
+    dist = {} #Distance dictionary
+    relaxation_count = {} #Relaxation count for each node dictionary
+    Q = min_heap.MinHeap([])
+    nodes = list(G.adj.keys())
+
+    #Initialize priority queue/heap and distances
+    for node in nodes:
+        Q.insert(min_heap.Element(node, float("inf")))
+        dist[node] = float("inf")
+    Q.decrease_key(source, 0)
+
+    #Meat of the algorithm
+    while not Q.is_empty():
+        current_element = Q.extract_min()
+        current_node = current_element.value
+        dist[current_node] = current_element.key
+
+        if current_node not in relaxation_count:
+            #Initiazlize relaxation_count to be 0 for each node
+            relaxation_count[current_node] = 0 
+
+        for neighbour in G.adj[current_node]:
+            if dist[current_node] + G.w(current_node, neighbour) < dist[neighbour]:
+                # Check that the relaxation count is <= k
+                if relaxation_count[current_node] <= k: 
+                    Q.decrease_key(neighbour, dist[current_node] + G.w(current_node, neighbour))
+                    dist[neighbour] = dist[current_node] + G.w(current_node, neighbour)
+                    pred[neighbour] = current_node
+                    relaxation_count[current_node] += 1 #Increase relaxation count by 1 for the current node
+                
+    return dist
 
 def bellman_ford(G, source):
     pred = {} #Predecessor dictionary. Isn't returned, but here for your understanding
@@ -114,3 +147,7 @@ def init_d(G):
                 d[i][j] = G.w(i, j)
         d[i][i] = 0
     return d
+
+
+G = create_random_complete_graph(4, 7)
+print(dijkstra(G, 0))
