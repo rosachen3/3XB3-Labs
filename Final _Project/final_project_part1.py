@@ -1,3 +1,5 @@
+import copy
+import matplotlib.pyplot as plot
 import min_heap
 import random
 
@@ -30,7 +32,12 @@ class DirectedWeightedGraph:
 
     def number_of_nodes(self):
         return len(self.adj)
-
+    
+    #### Added this myself (may need to erase after because I'm not sure if we should be adding methods) ###
+    def copy(self):
+        # Create a deep copy of the current object
+        new_graph = copy.deepcopy(self)
+        return new_graph
 
 def dijkstra(G, source):
     pred = {} #Predecessor dictionary. Isn't returned, but here for your understanding
@@ -148,6 +155,30 @@ def init_d(G):
         d[i][i] = 0
     return d
 
+def dijkstra_graph1(numNodesList, numRandomGraphs):
+    numK = []
+    distances = []
 
-G = create_random_complete_graph(4, 7)
-print(dijkstra(G, 0))
+    for numNode in numNodesList: 
+        maxK = numNode-1
+        G = create_random_complete_graph(numNode, 20)
+
+        for k in range(0, maxK, 5):       
+            G_copy = G.copy()
+            numK.append(k)
+            # Generate a certain number of random graphs for each test
+            distances.append(total_dist(dijkstra_approx(G_copy, 0, k)))
+
+    
+        plot.plot(distances, numK, label=f"Graph With {numNode} Nodes")
+    plot.xlabel('Number of Nodes')
+    plot.ylabel('Number k')
+    plot.title('Nodes vs. Number k')
+    plot.legend()
+    plot.show()
+
+numNodesList = [5,10,15]
+numRandomGraphs = 5  # Number of random graphs to create for each test
+dijkstra_graph1(numNodesList, numRandomGraphs)
+
+
