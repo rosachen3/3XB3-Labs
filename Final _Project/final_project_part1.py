@@ -243,4 +243,71 @@ def bellman_ford_approx(G, source, k):
                     pred[neighbour] = node
     return dist
 
+# Graph: Total Shortest Distance vs Number of Relaxations
+def graph1():
+    numNodes = 25
+    maxRelaxations = numNodes - 1
+    relaxationsList = []
+    dijkstraDistancesList = []
+    bellmanFordDistancesList = []
+
+    G = create_random_complete_graph(numNodes, 20)
+    for k in range(maxRelaxations): 
+        relaxationsList.append(k)
+        G1_copy = G.copy()
+        G2_copy = G.copy()
+
+        dijkstra_graph = dijkstra_approx(G1_copy, 0, k)
+        dijkstra_shortest_distances = total_dist(dijkstra_graph)
+        dijkstraDistancesList.append(dijkstra_shortest_distances)
+        
+        # bellman_ford_graph = bellman_ford_approx(G2_copy, 0, k)
+        # bellman_ford_shortest_distances = total_dist(bellman_ford_graph)
+        # bellmanFordDistancesList.append(bellman_ford_shortest_distances)
+    plot.plot(relaxationsList, dijkstraDistancesList, label='Dijkstra Approximation')
+    # plot.plot(relaxationsList, bellmanFordDistancesList, label='Bellman Ford Approximation')
+    plot.legend()
+    plot.title('Total Shortest Distance vs Number of Relaxations')
+    plot.xlabel('Number of relaxations')
+    plot.ylabel('Total Shortest Distance')
+    plot.show()
+
+# Graph 2: Number of Relaxations for Shortest Distance vs Number of nodes
+def graph2():
+    numNodes = 25
+    nodesList = []
+    relaxationsList1 = []
+    relaxationsList2 = []
+
+    for node in range(numNodes): 
+        nodesList.append(node)
+        G = create_random_complete_graph(node, node*(node-1)/2)
+        G1_copy = G.copy()
+        G2_copy = G.copy()
+        kValue1 = 0
+        dijkstra_shortest_distance = float('inf')
+        bellman_ford_shortest_distance = float('inf')
+        for k in range(node):
+            dijkstra_graph = dijkstra_approx(G1_copy, 0, k)
+            dijkstra_current_distance = total_dist(dijkstra_graph)
+
+            if dijkstra_current_distance < dijkstra_shortest_distance: 
+                dijkstra_shortest_distance = dijkstra_current_distance
+                kValue1 = k
+            
+        relaxationsList1.append(kValue1)
+
+    plot.plot(nodesList, relaxationsList1, label='Dijkstra Approximation')
+    plot.legend()
+    plot.title('Number of Relaxations for Shortest Distance vs Number of Nodes')
+    plot.xlabel('Number of nodes')
+    plot.ylabel('Number of Relaxations for Shortest Distance')
+    plot.show()
+
+# graph1()
+# graph2()
+
+
+    
+
 
