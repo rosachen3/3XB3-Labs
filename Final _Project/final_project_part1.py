@@ -304,8 +304,40 @@ def graph2():
     plot.ylabel('Number of Relaxations for Shortest Distance')
     plot.show()
 
+# Graph 3: Number of Relaxations for Shortest Distance vs Upper Edge Weight
+def graph3():
+    numNodes = 25
+    numEdgeWeight = 50
+    edgeWeightList = []
+    relaxationsList1 = []
+    relaxationsList2 = []
+
+    for edgeWeight in range(1, numEdgeWeight): 
+        edgeWeightList.append(edgeWeight)
+        G = create_random_complete_graph(numNodes, edgeWeight)
+        G1_copy = G.copy()
+        G2_copy = G.copy()
+        kValue1 = 0
+        dijkstra_shortest_distance = float('inf')
+        for k in range(numNodes):
+            dijkstra_graph = dijkstra_approx(G1_copy, 0, k)
+            dijkstra_current_distance = total_dist(dijkstra_graph)
+
+            if dijkstra_current_distance < dijkstra_shortest_distance: 
+                dijkstra_shortest_distance = dijkstra_current_distance
+                kValue1 = k
+            
+        relaxationsList1.append(kValue1)
+
+    plot.plot(edgeWeightList, relaxationsList1, label='Dijkstra Approximation')
+    plot.legend()
+    plot.title('Number of Relaxations for Shortest Distance vs Edge Weight')
+    plot.xlabel('Edge Density')
+    plot.ylabel('Number of Relaxations for Shortest Distance')
+    plot.show()
 # graph1()
 # graph2()
+# graph3()
 
 
     
