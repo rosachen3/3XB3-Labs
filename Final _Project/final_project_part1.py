@@ -215,8 +215,8 @@ def dijkstra_approx(G, source, k):
 
         for neighbour in G.adj[current_node]:
             if dist[current_node] + G.w(current_node, neighbour) < dist[neighbour]:
-                # Check that the relaxation count is <= k
-                if relaxation_count[current_node] <= k: 
+                # Check that the relaxation count is < k
+                if relaxation_count[current_node] < k: 
                     Q.decrease_key(neighbour, dist[current_node] + G.w(current_node, neighbour))
                     dist[neighbour] = dist[current_node] + G.w(current_node, neighbour)
                     pred[neighbour] = current_node
