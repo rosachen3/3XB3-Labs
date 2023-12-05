@@ -154,6 +154,7 @@ def init_d(G):
         d[i][i] = 0
     return d
 
+<<<<<<< HEAD
 # ************* Part 1 - Shortest Path Approximations *************
 
 def dijkstra_approx(G, source, k):
@@ -189,6 +190,8 @@ def dijkstra_approx(G, source, k):
                     relaxation_count[current_node] += 1 #Increase relaxation count by 1 for the current node
                 
     return dist
+=======
+>>>>>>> e65b121 (Fixed number of k iterations in dijkstra_approx)
 
 def bellman_ford_approx(G, source, k):
     pred = {} #Predecessor dictionary. Isn't returned, but here for your understanding
