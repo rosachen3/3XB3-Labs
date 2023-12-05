@@ -89,7 +89,7 @@ def dijkstra_approx(G, source, k):
         for neighbour in G.adj[current_node]:
             if dist[current_node] + G.w(current_node, neighbour) < dist[neighbour]:
                 # Check that the relaxation count is <= k
-                if relaxation_count[current_node] <= k: 
+                if relaxation_count[current_node] < k: 
                     Q.decrease_key(neighbour, dist[current_node] + G.w(current_node, neighbour))
                     dist[neighbour] = dist[current_node] + G.w(current_node, neighbour)
                     pred[neighbour] = current_node
@@ -153,31 +153,5 @@ def init_d(G):
                 d[i][j] = G.w(i, j)
         d[i][i] = 0
     return d
-
-# def dijkstra_graph1(numNodesList, numRandomGraphs):
-#     numK = []
-#     distances = []
-
-#     for numNode in numNodesList: 
-#         maxK = numNode-1
-#         G = create_random_complete_graph(numNode, 20)
-
-#         for k in range(0, maxK, 5):       
-#             G_copy = G.copy()
-#             numK.append(k)
-#             # Generate a certain number of random graphs for each test
-#             distances.append(total_dist(dijkstra_approx(G_copy, 0, k)))
-
-    
-#         plot.plot(distances, numK, label=f"Graph With {numNode} Nodes")
-#     plot.xlabel('Number of Nodes')
-#     plot.ylabel('Number k')
-#     plot.title('Nodes vs. Number k')
-#     plot.legend()
-#     plot.show()
-
-# numNodesList = [5,10,15]
-# numRandomGraphs = 5  # Number of random graphs to create for each test
-# dijkstra_graph1(numNodesList, numRandomGraphs)
 
 
