@@ -1,5 +1,6 @@
 import copy
 from queue import PriorityQueue
+import time
 import matplotlib.pyplot as plot
 import min_heap 
 import random
@@ -108,6 +109,7 @@ def createLondonCityGraph():
     # Open london_connections file to access data 
     with open(path1, mode='r') as file: 
         london_connections = csv.reader(file)
+        next(london_connections)
          
         for row in london_connections:
             station1 = row[0]
@@ -161,7 +163,6 @@ def buildHeuristic(G, destination):
             long1 = 0
 
             # Compute latitude and longitude of destination node
-            print("Destination: ", destination) 
             for entry in london_stations:
                 if int(entry[0]) == destination:    # Find latitude/ longitude of destination node
                     lat1 = float(entry[1])
@@ -175,7 +176,45 @@ def buildHeuristic(G, destination):
                     heuristic[entry[0]] = h_value 
     return heuristic
 
-G = createLondonCityGraph()
-h = buildHeuristic(G,1)
+def graph():
+    G = createLondonCityGraph()
+    nodesList = list(G.adj.keys())
+    numCombinations = 500
+    pairs = set() # Unique pairs only
 
+    # Creating 100 pairs of combinations of (start_node, destination_node)
+    while len(pairs) < numCombinations: 
+        node1 = random.choice(nodesList)
+        node2 = random.choice(nodesList)
+        while node2 == node1:
+            node2 = random.choice(nodesList)
+        pairs.add(((node1, node2)))
+        
+    dijkstra_times = []
+    a_star_times = []
 
+    for source, destination in pairs:
+        # Measure Dijkstra running time
+        dijkstra_start_time = time.time()
+        dijkstra(G, source)
+        dijkstra_end_time = time.time()
+        dijkstra_times.append(dijkstra_end_time - dijkstra_start_time)
+
+        # Measure A* running time
+        heuristic = buildHeuristic(G, destination)
+        a_star_start_time = time.time()
+        a_star(G, source, destination, heuristic)
+        a_star_end_time = time.time()
+        a_star_times.append(a_star_end_time - a_star_start_time)
+
+    # Plot the results
+    plot_x = list(range(1, len(pairs) + 1))
+
+    plot.plot(plot_x, dijkstra_times, label='Dijkstra')
+    plot.plot(plot_x, a_star_times, label='A*')
+    plot.xlabel('500 Different Path Combinations')
+    plot.ylabel('Running Time (seconds)')
+    plot.title('Comparison of Dijkstra and A* Algorithms')
+    plot.legend()
+    plot.show()
+graph()
