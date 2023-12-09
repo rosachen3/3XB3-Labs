@@ -1,4 +1,5 @@
 import copy
+import timeit
 import matplotlib.pyplot as plot
 import min_heap
 import random
@@ -228,19 +229,22 @@ def bellman_ford_approx(G, source, k):
     pred = {} #Predecessor dictionary. Isn't returned, but here for your understanding
     dist = {} #Distance dictionary
     nodes = list(G.adj.keys())
+    relaxation_count = {} #Relaxation count for each node dictionary
 
-    #Initialize distances
+    #Initialize distances and relaxation counts
     for node in nodes:
         dist[node] = float("inf")
+        relaxation_count[node] = 0
     dist[source] = 0
 
     #Meat of the algorithm
     for _ in range(k+1): # Running k iterations instead of V - 1
         for node in nodes:
             for neighbour in G.adj[node]:
-                if dist[neighbour] > dist[node] + G.w(node, neighbour):
+                if dist[neighbour] > dist[node] + G.w(node, neighbour) and relaxation_count[neighbour] < k:
                     dist[neighbour] = dist[node] + G.w(node, neighbour)
                     pred[neighbour] = node
+                    relaxation_count[neighbour] += 1
     return dist
 
 # Graph: Total Shortest Distance vs Number of Relaxations
@@ -261,11 +265,11 @@ def graph1():
         dijkstra_shortest_distances = total_dist(dijkstra_graph)
         dijkstraDistancesList.append(dijkstra_shortest_distances)
         
-        # bellman_ford_graph = bellman_ford_approx(G2_copy, 0, k)
-        # bellman_ford_shortest_distances = total_dist(bellman_ford_graph)
-        # bellmanFordDistancesList.append(bellman_ford_shortest_distances)
+        bellman_ford_graph = bellman_ford_approx(G2_copy, 0, k)
+        bellman_ford_shortest_distances = total_dist(bellman_ford_graph)
+        bellmanFordDistancesList.append(bellman_ford_shortest_distances)
     plot.plot(relaxationsList, dijkstraDistancesList, label='Dijkstra Approximation')
-    # plot.plot(relaxationsList, bellmanFordDistancesList, label='Bellman Ford Approximation')
+    plot.plot(relaxationsList, bellmanFordDistancesList, label='Bellman Ford Approximation')
     plot.legend()
     plot.title('Total Shortest Distance vs Number of Relaxations')
     plot.xlabel('Number of relaxations')
@@ -285,19 +289,28 @@ def graph2():
         G1_copy = G.copy()
         G2_copy = G.copy()
         kValue1 = 0
+        kValue2 = 0
         dijkstra_shortest_distance = float('inf')
         bellman_ford_shortest_distance = float('inf')
         for k in range(node):
             dijkstra_graph = dijkstra_approx(G1_copy, 0, k)
             dijkstra_current_distance = total_dist(dijkstra_graph)
 
+            bellman_ford_graph = bellman_ford_approx(G2_copy, 0, k)
+            bellman_ford_current_distance = total_dist(bellman_ford_graph)
+
             if dijkstra_current_distance < dijkstra_shortest_distance: 
                 dijkstra_shortest_distance = dijkstra_current_distance
                 kValue1 = k
             
+            if bellman_ford_current_distance < bellman_ford_shortest_distance: 
+                bellman_ford_shortest_distance = bellman_ford_current_distance 
+                kValue2 = k
         relaxationsList1.append(kValue1)
+        relaxationsList2.append(kValue2)
 
     plot.plot(nodesList, relaxationsList1, label='Dijkstra Approximation')
+    plot.plot(nodesList, relaxationsList2, label='Bellman Ford Approximation')
     plot.legend()
     plot.title('Number of Relaxations for Shortest Distance vs Number of Nodes')
     plot.xlabel('Number of nodes')
@@ -318,18 +331,28 @@ def graph3():
         G1_copy = G.copy()
         G2_copy = G.copy()
         kValue1 = 0
+        kValue2 = 0
         dijkstra_shortest_distance = float('inf')
+        bellman_ford_shortest_distance = float('inf')
         for k in range(numNodes):
             dijkstra_graph = dijkstra_approx(G1_copy, 0, k)
             dijkstra_current_distance = total_dist(dijkstra_graph)
+
+            bellman_ford_graph = bellman_ford_approx(G2_copy, 0, k)
+            bellman_ford_current_distance = total_dist(bellman_ford_graph)
 
             if dijkstra_current_distance < dijkstra_shortest_distance: 
                 dijkstra_shortest_distance = dijkstra_current_distance
                 kValue1 = k
             
+            if bellman_ford_current_distance < bellman_ford_shortest_distance: 
+                bellman_ford_shortest_distance = bellman_ford_current_distance 
+                kValue2 = k
         relaxationsList1.append(kValue1)
+        relaxationsList2.append(kValue2)
 
     plot.plot(edgeWeightList, relaxationsList1, label='Dijkstra Approximation')
+    plot.plot(edgeWeightList, relaxationsList2, label='Bellman Ford Approximation')
     plot.legend()
     plot.title('Number of Relaxations for Shortest Distance vs Edge Weight')
     plot.xlabel('Edge Density')
@@ -339,7 +362,48 @@ def graph3():
 # graph2()
 # graph3()
 
+# G = DirectedWeightedGraph()
+# G.add_node(0)
+# G.add_node(1)
+# G.add_node(2)
+# G.add_node(3)
+# G.add_node(4)
 
-    
+# G.add_edge(0, 1, -12)
+# G.add_edge(4, 1, 4)
+# G.add_edge(2, 4, 16)
+# G.add_edge(1, 2, 1)
+# G.add_edge(2, 3, 10)
+# G.add_edge(3, 4, 20)
+# G.add_edge(1, 3, 5)
+
+
+def exp_mystery(n):
+    times = [] #list of execution time for each list length
+    #list_lengths = [10, 50, 100, 300, 500]
+    # nodes = [1, 10, 100, 1000]
+    nodes = []
+    for i in range(1, 100):
+        total = 0
+        nodes.append(i)
+        for j in range(n):
+            G = create_random_complete_graph(i, 10)
+
+            start = timeit.default_timer()
+            mystery(G)
+            end = timeit.default_timer()
+            total += end - start
+
+        times.append(total/n)
+    return times, nodes
+
+# outputs = exp_mystery(20)
+
+plot.loglog(outputs[1], outputs[0], base=10, linestyle='-', label='MysteryAlgorithm')
+plot.legend()
+plot.title('Mystery Algorithm Performance')
+plot.xlabel('Number of Nodes')
+plot.ylabel('Execution Time (seconds)')
+plot.show()
 
 
