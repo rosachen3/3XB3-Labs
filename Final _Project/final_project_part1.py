@@ -378,32 +378,32 @@ def graph3():
 # G.add_edge(1, 3, 5)
 
 
-def exp_mystery(n):
-    times = [] #list of execution time for each list length
-    #list_lengths = [10, 50, 100, 300, 500]
-    # nodes = [1, 10, 100, 1000]
-    nodes = []
-    for i in range(1, 100):
-        total = 0
-        nodes.append(i)
-        for j in range(n):
-            G = create_random_complete_graph(i, 10)
+# def exp_mystery(n):
+#     times = [] #list of execution time for each list length
+#     #list_lengths = [10, 50, 100, 300, 500]
+#     # nodes = [1, 10, 100, 1000]
+#     nodes = []
+#     for i in range(1, 100):
+#         total = 0
+#         nodes.append(i)
+#         for j in range(n):
+#             G = create_random_complete_graph(i, 10)
 
-            start = timeit.default_timer()
-            mystery(G)
-            end = timeit.default_timer()
-            total += end - start
+#             start = timeit.default_timer()
+#             mystery(G)
+#             end = timeit.default_timer()
+#             total += end - start
 
-        times.append(total/n)
-    return times, nodes
+#         times.append(total/n)
+#     return times, nodes
 
 # outputs = exp_mystery(20)
 
-plot.loglog(outputs[1], outputs[0], base=10, linestyle='-', label='MysteryAlgorithm')
-plot.legend()
-plot.title('Mystery Algorithm Performance')
-plot.xlabel('Number of Nodes')
-plot.ylabel('Execution Time (seconds)')
-plot.show()
+# plot.loglog(outputs[1], outputs[0], base=10, linestyle='-', label='MysteryAlgorithm')
+# plot.legend()
+# plot.title('Mystery Algorithm Performance')
+# plot.xlabel('Number of Nodes')
+# plot.ylabel('Execution Time (seconds)')
+# plot.show()
 
 
